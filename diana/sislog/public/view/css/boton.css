@@ -1,0 +1,15 @@
+input#boton {
+
+	font-family: helvetica ; 
+	padding: 5px 50px ; 
+	color : white;
+	font-size: 1em ; 
+	background-color:#0198F5  ; 
+	transition : background-color .25s;
+	border: 0px ; 
+	border-radius: 5px ; 
+	box-shadow: 0px 4px 0px #0177F5 ;
+
+
+}
+
