@@ -11,4 +11,8 @@
 		mysql_close($this->enlace=mysql_connect('localhost','root',''));
 	} 
 }
+<<<<<<< HEAD
 ?>
+=======
+?>
+>>>>>>> origin/master
