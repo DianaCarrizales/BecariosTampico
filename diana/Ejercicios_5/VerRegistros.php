@@ -1,8 +1,11 @@
+<?php
+	include('BD/motor.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
+	<link rel="icon" href="img/logo.png">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -146,15 +149,6 @@
                     </li>
                     <li>
                         <a href="VerRegistros.php">Ver Registros</a>
-						<ul>
-							<li><a href="modificar.php">Editar</a></li>
-							<li><a href="eliminar.php">Borrar</a></li>
-								<ul>
-									<li><a href="modificar.php">Editar</a></li>
-									<li><a href="eliminar.php">Borrar</a></li>
-								</ul>
-							</li>
-						</ul>
                     </li>
 					<li>
                         <a href="Contactanos.php">Contactanos</a>
@@ -176,66 +170,76 @@
                         <strong> Actuales</strong>
                     </h2>
                     <hr></center>
+					
+					
                 </div>
 				<!-- /.Conexion SELECT con bd..mostrar registros-->
-				<?php 
-					  // Devuelve todas las filas de una consulta a una tabla de una base de datos 
-					  // en forma de tabla de HTML 
-					  function sql_dump_result($result) 
-					  { 
-						$line = ''; 
-						$head = '';
+				<?php
+					$s= "localhost";
+					$u= "root";
+					$pw= "";
+					$bd= "sistemaescolar";
+
+						$conexion=new mysqli($s,$u,$pw,$bd);
+
+					if($conexion -> connect_errno){
+
+						echo "No conectado";
+					}
+					else{
 						
-					  while($temp = mysql_fetch_assoc($result)) 
-					  { 
-						if(empty($head)) 
-						{ 
-						  $keys = array_keys($temp); 
-						  $head = '<center><tr><th></center>' . implode('<center></th><th></center>', $keys). '<center></th></tr></center>'; 
-						}
-						
-						$line .= '<center><tr><td></center>' . implode('<center></td><td></center>', $temp). '</center></td></tr></center>'; 
-					  }
-					  
-					  return '<center><table class="rwd-table" border="9" width=100% >' . $head . $line . '</table></center>'; 
+						//echo "conectado";
 					}
 
-					  // Se conecta al SGBD 
-					  if(!($iden = mysql_connect("localhost", "root", ""))) 
-						die("Error: No se pudo conectar");
-						
-					  // Selecciona la base de datos 
-					  if(!mysql_select_db("sistemaescolar", $iden))
-						die("Error: No existe la base de datos"); 
-						
-					  // Sentencia SQL: muestra todo el contenido de la tabla "alumnos,municipio,estado y programaeducativo" 
-					  $sentencia = "SELECT a.Matricula,CONCAT(a.Nombre,' ',a.Apellido) as Alumno ,
+				?>
+						<table class="rwd-table" border="9" width=100% >
+						<tr>
+							<td><b>Matricula</b></td>
+							<td><b>Nombre del Alumno</b></td>
+							<td><b>Programa Educativo</b></td>
+							<td><b>Direccion</b></td>
+							<td><b>Estado</b></td>
+							<td><b>Municipio</b></td>
+				
+						 </tr>
+						<?php
+						$result = mysqli_query($conexion," SELECT a.Matricula,CONCAT(a.Nombre,' ',a.Apellido) as Alumno ,
 											 p.Nombre as Programa,a.Direccion, e.Nombre as Estado,
 											 m.Nombre as Municipio
 									FROM estados as e 
 									INNER JOIN municipios as m on m.EstadoId=e.EstadoId
 									INNER JOIN alumnos as a on a.MunicipioId=m.MunicipioId 
 									INNER JOIN programaeducativo as p on a.ProgramaId=p.ProgramaId
-									ORDER BY Matricula"; 
-					  // Ejecuta la sentencia SQL 
-					  $resultado = mysql_query($sentencia, $iden); 
-					  if(!$resultado) 
-						die("Error: no se pudo realizar la consulta");
-
-					  // Muestra el contenido de la tabla como una tabla HTML	
-					  echo sql_dump_result($resultado); 
-					  
-					  // Libera la memoria del resultado
-					  mysql_free_result($resultado);
-
-					  // Cierra la conexión con la base de datos 
-					  mysql_close($iden); 
-				?> 
+									ORDER BY Matricula");
+						while($row = mysqli_fetch_assoc($result)){ ?>
+						 <tr>
+							<td><?php echo $row["Matricula"];?></td>
+							<td><?php echo $row["Alumno"];?></td>
+							<td><?php echo $row["Programa"];?></td>
+							<td><?php echo $row["Direccion"];?></td>
+							<td><?php echo $row["Estado"];?></td>
+							<td><?php echo $row["Municipio"];?></td>
+						<td><a href="modificar.php?Matricula=<?php echo $row['Matricula'];?>">Modificar</a></td>
+							<td><a href="eliminar.php?Matricula=<?php echo $row['Matricula'];?>">Eliminar</a></td>
+						 </tr>
+						
+						<?php 
+						}
+						
+						?>
+						
+						</table>
+				
+				
 				
 				 </div>
                 <!-- /.Fin de la conexión -->
                	
                
+			   
+			   
+			   
+			   
                 <div class="clearfix"></div>
             </div>
         </div>

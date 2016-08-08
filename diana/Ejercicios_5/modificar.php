@@ -1,8 +1,13 @@
+
+
+<?php
+	include('BD/motor.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
+	<link rel="icon" href="img/logo.png">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -146,15 +151,6 @@
                     </li>
                     <li>
                         <a href="VerRegistros.php">Ver Registros</a>
-						<ul>
-							<li><a href="modificar.php">Editar</a></li>
-							<li><a href="eliminar.php">Borrar</a></li>
-								<ul>
-									<li><a href="modificar.php">Editar</a></li>
-									<li><a href="eliminar.php">Borrar</a></li>
-								</ul>
-							</li>
-						</ul>
                     </li>
 					<li>
                         <a href="Contactanos.php">Contactanos</a>
@@ -186,51 +182,98 @@
 						<input type="submit" name="buscar" value="Buscar">
 					</form>-->
 						</select>
+						<?php
+						  $s= "localhost";
+							$u= "root";
+							$pw= "";
+							$bd= "sistemaescolar";
+
+								$conexion=new mysqli($s,$u,$pw,$bd);
+
+							if($conexion -> connect_errno){
+
+								echo "No conectado";
+							}
+							else{
+								
+								//echo "conectado";
+							}
+
+						  $Matricula=$_GET['Matricula'];
+						  $result = mysqli_query($conexion,"SELECT * FROM alumnos WHERE Matricula='$Matricula'");
+						  $row = mysqli_fetch_assoc($result);
+						  $result2=mysqli_query($conexion,"SELECT m.Nombre FROM municipios as m INNER JOIN alumnos as a on  m.MunicipioId=a.MunicipioId
+															WHERE Matricula='$Matricula'");
+						  $row2=mysqli_fetch_assoc($result2);
+						  $result3=mysqli_query($conexion,"SELECT p.Nombre FROM programaeducativo as p INNER JOIN alumnos as a on  p.ProgramaId=a.ProgramaId
+															WHERE Matricula='$Matricula'");
+						  $row3=mysqli_fetch_assoc($result3);
+						  
+						?>
 						<br>
 						<form  method="POST" action="update.php" >
                         <div class="row">
-							<div class="form-group col-lg-4">
-                                <label>Matricula</label>
-                                <input type="text" name=Matricula class="form-control">
-                            </div>
                             <div class="form-group col-lg-4">
                                 <label>Nombre(s)</label>
-                                <input type="text" name=Nombre class="form-control">
+                                <input type="text" name=Nombre class="form-control" value="<?php echo $row['Nombre'];?>">
                             </div>
                             <div class="form-group col-lg-4">
                                 <label>Apellidos</label>
-                                <input type="text" name=Apellido class="form-control">
+                                <input type="text" name=Apellido class="form-control" value="<?php echo $row['Apellido'];?>">
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <label>Teléfono</label>
+                                <input type="text" name=Telefono class="form-control" value="<?php echo $row['Telefono'];?>">
                             </div>
 							<div class="clearfix"></div>
                             <div class="form-group col-lg-4">
-                                <label>Teléfono</label>
-                                <input type="text" name=Telefono class="form-control">
-                            </div>
-                            <div class="form-group col-lg-4">
                                 <label>Dirección</label>
-                                <input type="text" name=Direccion class="form-control">
+                                <input type="text" name=Direccion class="form-control" value="<?php echo $row['Direccion'];?>">
                             </div>
 							<div class="form-group col-lg-4">
                                 <label>Correo electrónico</label>
-                                <input type="text" name=Email class="form-control">
+                                <input type="text" name=Email class="form-control" value="<?php echo $row['Email'];?>">
                             </div>
-							<div class="clearfix"></div>
 							<div class="form-group col-lg-4">
                                 <label>Fecha de Nacimiento</label>
-                                <input type="date_create" name=FechaNacimiento class="form-control">
+                                <input type="date" name=FechaNacimiento class="form-control" value="<?php echo $row['FechaNacimiento'];?>">
                             </div>
+							<div class="clearfix"></div>
                             <div class="form-group col-lg-3">
-                                <label>No. Municipio</label>
-                                <input type="number_format" name=MunicipioId class="form-control">
+                                <label>Municipio</label>
+                                <select name=MunicipioId class="form-control" value="<?php echo $row['MunicipioId'];?>">
+								<option value="<?php echo $row['MunicipioId'];?>"> <?php echo $row2['Nombre'];?> </option>
+								<option value=0> ----- Cambia de Municipio ----- </option>
+								<option value=1>Abasolo</option>
+								<option value=2>Altamira</option>
+								<option value=3>Tampico</option>
+								<option value=4>Madero</option>
+								<option value=5>Allende</option>
+								<option value=6>Hidalgo</option>
+								<option value=7>Cosio</option>
+								<option value=8>Tepezala</option>
+								<option value=9>Soliraridad</option>
+								</select>
                             </div>
-							<div class="form-group col-lg-3">
-                                <label>No. de Programa Educativo</label>
-                                <input type="number_format" name=ProgramaId class="form-control">
+							<div class="form-group col-lg-4">
+                                <label>Programa Educativo</label>
+                                <select name=ProgramaId class="form-control" value="<?php echo $row['ProgramaId'];?>">
+								<option value="<?php echo $row['ProgramaId'];?>"> <?php echo $row3['Nombre'];?> </option>
+								<option value=0> ----- Cambia de Programa Educativo ----- </option>
+								<option value=1>Ingeniería en Tecnologías de la Información</option>
+								<option value=2>Ingeniería en Energías</option>
+								<option value=3>Ingeniería en Electrónica y Telecomunicaciones</option>
+								<option value=4>Ingeniería Industrial</option>
+								</select>
+                            </div>
+							<div class="form-group col-lg-4">
+                                <input type="hidden" name= "Matricula" value="<?php echo $Matricula;?>"> 
                             </div>
                             <center><div class="form-group col-lg-12" padding=5>
                                 <input type="submit" value="Actualizar Informacion">
                                 <!-- /.<input type="hidden" name="reset" value="contact">
                                 <button type="submit" class="btn btn-default">Borrar</button>-->
+								<a href="VerRegistros.php"><input align="right" type="button" value="Volver a los Registros"></a>
                             </div></center>
                         </div>
                     </form>
@@ -244,116 +287,7 @@
         </div>
     <!-- /.container -->
 
-    <div class="row">
-            <div class="box">
-                <div class="col-lg-12">
-				
-                    <center><hr>
-                    <h2 class="intro-text text-center">Listas de 
-                        <strong> Programas Educativos</strong>
-                    </h2>
-                    <hr></center>
-                </div>
-                 <!-- /.tabla -->
-						  <?php 
-								// Devuelve todas las filas de una consulta a una tabla de una base de datos 
-							  // en forma de tabla de HTML 
-							  function sql_dump_result($result) 
-							  { 
-								$line = ''; 
-								$head = '';
-								
-							  while($temp = mysql_fetch_assoc($result)) 
-							  { 
-								if(empty($head)) 
-								{ 
-								  $keys = array_keys($temp); 
-								  $head = '<center><tr><th></center>' . implode('<center></th><th></center>', $keys). '<center></th></tr></center>'; 
-								}
-								
-								$line .= '<center><tr><td></center>' . implode('<center></td><td></center>', $temp). '</center></td></tr></center>'; 
-							  }
-							  
-							  return '<center><table class="rwd-table" border="9" width=100% >' . $head . $line . '</table></center>'; 
-							}
-							
-						  // Se conecta al SGBD 
-							  if(!($iden = mysql_connect("localhost", "root", ""))) 
-								die("Error: No se pudo conectar");
-								
-							  // Selecciona la base de datos 
-							  if(!mysql_select_db("sistemaescolar", $iden))
-								die("Error: No existe la base de datos"); 
-								
-							  // Sentencia SQL: muestra todo el contenido de la tabla "municipio" 
-							  $sentencia = "SELECT ProgramaId as Numero,Nombre as Programa,Descripcion FROM programaeducativo"; 
-							  // Ejecuta la sentencia SQL 
-							  $resultado = mysql_query($sentencia, $iden); 
-							  if(!$resultado) 
-								die("Error: no se pudo realizar la consulta");
-
-							  // Muestra el contenido de la tabla como una tabla HTML	
-							  echo sql_dump_result($resultado); 
-							  
-							  // Libera la memoria del resultado
-							  mysql_free_result($resultado);
-
-							  // Cierra la conexión con la base de datos 
-							  mysql_close($iden);
-							?> 
-				</center>
-				 <!-- /.tabla -->
-                <div class="clearfix"></div>
-            </div>
-        </div>
-
-    </div>
-	
-	<div class="container">
-
-        <div class="row">
-            <div class="box">
-                <div class="col-lg-12">
-                    <center><hr>
-                    <h2 class="intro-text text-center">Lista de
-                        <strong> Municipios.</strong>
-                    </h2>
-                    <hr></center>
-                </div>
-                <div class="col-md-8">
-                   <!-- Embedded Google Map using an iframe - to select your location find it on Google maps and paste the link as the iframe src. If you want to use the Google Maps API instead then have at it! -->
-                    <iframe width="100%" height="500" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m13!1m11!1m3!1d8577023.141716339!2d-95.84099746696056!3d14.155611666107196!2m2!1f358.41642228738993!2f7.536759564047574!3m2!1i1024!2i768!4f20!5e1!3m2!1ses!2smx!4v1466077418019" width="600" height="450" frameborder="0" style="border:0" allowfullscreen"></iframe></div>																										
-                <div class="col-md-4">
-					<?php
-						   // Se conecta al SGBD 
-							  if(!($iden = mysql_connect("localhost", "root", ""))) 
-								die("Error: No se pudo conectar");
-								
-							  // Selecciona la base de datos 
-							  if(!mysql_select_db("sistemaescolar", $iden))
-								die("Error: No existe la base de datos"); 
-								
-							  // Sentencia SQL: muestra todo el contenido de la tabla "municipio" 
-							  $sentencia = "SELECT MunicipioId as Numero,Nombre FROM municipios"; 
-							  // Ejecuta la sentencia SQL 
-							  $resultado = mysql_query($sentencia, $iden); 
-							  if(!$resultado) 
-								die("Error: no se pudo realizar la consulta");
-
-							  // Muestra el contenido de la tabla como una tabla HTML	
-							  echo sql_dump_result($resultado); 
-							  
-							  // Libera la memoria del resultado
-							  mysql_free_result($resultado);
-
-							  // Cierra la conexión con la base de datos 
-							  mysql_close($iden); 
-					?>
-					
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
+   
     <!-- /.container -->
 
     <footer>

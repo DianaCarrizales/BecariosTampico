@@ -7,7 +7,7 @@
 	 if(!mysql_select_db("sistemaescolar", $iden))
 		die("Error: No existe la base de datos");
 
-	$sentencia=("DELETE FROM alumnos WHERE Matricula='$_POST[Matricula]'");
+	$sentencia=("DELETE  FROM alumnos WHERE Matricula='$_POST[Matricula]'");
 	 $resultado = mysql_query($sentencia, $iden); 
 		if(!$resultado) 
 			die("Error: no se pudo realizar la consulta");	
@@ -24,7 +24,7 @@
 <html lang="en">
 
 <head>
-
+	<link rel="icon" href="img/logo.png">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">

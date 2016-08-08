@@ -1,3 +1,5 @@
+
+
 <?php
 	include('BD/motor.php');
 ?>
@@ -6,7 +8,7 @@
 <html lang="en">
 
 <head>
-
+	<link rel="icon" href="img/logo.png">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -150,15 +152,6 @@
                     </li>
                     <li>
                         <a href="VerRegistros.php">Ver Registros</a>
-						<ul>
-							<li><a href="modificar.php">Editar</a></li>
-							<li><a href="eliminar.php">Borrar</a></li>
-								<ul>
-									<li><a href="modificar.php">Editar</a></li>
-									<li><a href="eliminar.php">Borrar</a></li>
-								</ul>
-							</li>
-						</ul>
                     </li>
 					<li>
                         <a href="Contactanos.php">Contactanos</a>
@@ -176,8 +169,8 @@
             <div class="box">
                 <div class="col-lg-12">
                     <center><hr>
-                    <h2 class="intro-text text-center">Borrar
-                        <strong> Registro</strong>
+                    <h2 class="intro-text text-center">¿Seguro que desea
+                        <strong> Borrar el Registro?</strong>
                     </h2>
                     <hr></center>
                 </div>
@@ -188,19 +181,52 @@
 				<td>
 						<br>
 						<center>
+						<?php
+						  $s= "localhost";
+							$u= "root";
+							$pw= "";
+							$bd= "sistemaescolar";
+
+								$conexion=new mysqli($s,$u,$pw,$bd);
+
+							if($conexion -> connect_errno){
+
+								echo "No conectado";
+							}
+							else{
+								
+								//echo "conectado";
+							}
+
+						  $Matricula=$_GET['Matricula'];
+						  $result = mysqli_query($conexion,"SELECT Matricula FROM alumnos WHERE Matricula='$Matricula'");
+						  $row = mysqli_fetch_assoc($result);
+						?>
 						<form  method="POST" action="delete.php" align=center>
                         <div class="row">
 							<div class="form-group col-lg-4">
                                 <label>Matricula</label>
-                                <input type="number_format" name=Matricula class="form-control">
+                                <input name=Matricula class="form-control" value="<?php echo $Matricula;?>">
                             </div>
 							<div class="form-group col-lg-3">
 								<center><img src="img/el.png" width=50%></img></center>
                             </div>
 							<div class="form-group col-lg-3">
-								<label type="hidden">Elimina el Registro</label>
+								<label type="hidden">Eliminar el Registro</label>
                                 <input type="submit" value="Eliminar Registro">
                             </div>
+							<center>
+							<div class="clearfix"></div>
+							<div class="form-group col-lg-4">
+								<label>Si no desea borrar el registro </label>
+                            </div>
+							<div class="form-group col-lg-3">
+								<label> de click aquí ---> </label>
+                            </div>
+							<div class="form-group col-lg-3">
+								<a href="VerRegistros.php"><input align="right" type="button" value="Volver a los Registros"></a>
+                            </div>
+							</center>
                         </div>
                     </form>
 					
